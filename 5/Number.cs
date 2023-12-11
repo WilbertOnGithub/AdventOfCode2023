@@ -12,4 +12,25 @@ public class Number
         LineNumber = lineNumber;
         Index = index;
     }
+
+    public IEnumerable<(int line, int column)> GetBoundingBoxCoordinates()
+    {
+        int numberLength = Value.ToString().Length;
+
+        // Top line coordinates
+        for (int i = Index-1; i < Index + numberLength + 1; i++)
+        {
+            yield return (LineNumber - 1, i);
+        }
+
+        // Middle line coordinates
+        yield return (LineNumber, Index - 1);
+        yield return (LineNumber, Index + numberLength + 1);
+
+        // Bottom line coordinates
+        for (int i = Index-1; i < Index + numberLength + 1; i++)
+        {
+            yield return (LineNumber + 1, i);
+        }
+    }
 }
