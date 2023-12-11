@@ -31,25 +31,26 @@ public partial class Solver
 
     private bool BoundingBoxHasSymbol(Number number)
     {
-        foreach ((int line, int column) boundingBoxCoordinate in number.GetBoundingBoxCoordinates())
+        bool found = false;
+
+        foreach ((int line, int column) in number.GetBoundingBoxCoordinates())
         {
             try
             {
+                Console.Write($"Line: {line} Column: {column} {matrix[line].AsSpan(column, 1)}");
                 if (MatchSymbol()
-                    .IsMatch(matrix[boundingBoxCoordinate.line].Substring(boundingBoxCoordinate.column, 1)))
-                {
-                    Console.WriteLine($"Value found: {number.Value}");
-                    return true;
+                    .IsMatch(matrix[line].AsSpan(column, 1))) {
+                    found = true;
                 }
             }
             catch (ArgumentOutOfRangeException)
             {
-                // Ignore
             }
         }
 
+        Console.WriteLine();
         // Everything checked, bounding box contains nothing.
-        return false;
+        return found;
     }
 
     private IEnumerable<Number> ExtractNumbers(string line, int lineNumber)

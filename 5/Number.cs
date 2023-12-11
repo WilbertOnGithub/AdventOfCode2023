@@ -27,7 +27,7 @@ public class Number
 
         // Middle line coordinates
         yield return (LineNumber, Index - 1);
-        yield return (LineNumber, Index + numberLength + 1);
+        yield return (LineNumber, Index + numberLength);
 
         // Bottom line coordinates
         for (int i = Index - 1; i < Index + numberLength + 1; i++)
