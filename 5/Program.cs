@@ -2,8 +2,10 @@
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
-        Console.WriteLine("Hello, World!");
+        var solver = new Solver();
+
+        Console.WriteLine($"Result: {solver.Solve()}");
     }
 }

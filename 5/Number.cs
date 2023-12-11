@@ -6,6 +6,8 @@ public class Number
     private int LineNumber { get; init; }
     private int Index { get; init; }
 
+    public bool ContainsSymbolInBoundingBox { get; set; }
+
     public Number(int value, int lineNumber, int index)
     {
         Value = value;
@@ -18,7 +20,7 @@ public class Number
         int numberLength = Value.ToString().Length;
 
         // Top line coordinates
-        for (int i = Index-1; i < Index + numberLength + 1; i++)
+        for (int i = Index - 1; i < Index + numberLength + 1; i++)
         {
             yield return (LineNumber - 1, i);
         }
@@ -28,7 +30,7 @@ public class Number
         yield return (LineNumber, Index + numberLength + 1);
 
         // Bottom line coordinates
-        for (int i = Index-1; i < Index + numberLength + 1; i++)
+        for (int i = Index - 1; i < Index + numberLength + 1; i++)
         {
             yield return (LineNumber + 1, i);
         }
