@@ -24,6 +24,7 @@ public partial class Solver
         foreach (Number number in Numbers)
         {
             number.ContainsSymbolInBoundingBox = BoundingBoxHasSymbol(number);
+            PrintCoordinates(number);
         }
 
         return Numbers.Where(x => x.ContainsSymbolInBoundingBox).Sum(x => x.Value);
@@ -31,16 +32,13 @@ public partial class Solver
 
     private bool BoundingBoxHasSymbol(Number number)
     {
-        bool found = false;
-
         foreach ((int line, int column) in number.GetBoundingBoxCoordinates())
         {
             try
             {
-                Console.Write($"Line: {line} Column: {column} {matrix[line].AsSpan(column, 1)}");
-                if (MatchSymbol()
-                    .IsMatch(matrix[line].AsSpan(column, 1))) {
-                    found = true;
+                if (!MatchPoint().IsMatch(matrix[line].Substring(column, 1)))
+                {
+                    return true;
                 }
             }
             catch (ArgumentOutOfRangeException)
@@ -48,9 +46,24 @@ public partial class Solver
             }
         }
 
+        return false;
+    }
+
+    private void PrintCoordinates(Number number)
+    {
+        Console.WriteLine($"Value: {number.Value}");
+        Console.WriteLine($"Symbol: {number.ContainsSymbolInBoundingBox}");
+        foreach ((int line, int column) in number.GetBoundingBoxCoordinates())
+        {
+            try
+            {
+                Console.WriteLine(matrix[line].Substring(column, 1));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+            }
+        }
         Console.WriteLine();
-        // Everything checked, bounding box contains nothing.
-        return found;
     }
 
     private IEnumerable<Number> ExtractNumbers(string line, int lineNumber)
@@ -66,9 +79,9 @@ public partial class Solver
         }
     }
 
-    [GeneratedRegex(@"[^0-9]*(?<Number>\d{1,})")]
+    [GeneratedRegex(@"(?<Number>\d{1,})")]
     private static partial Regex MatchNumbers();
 
-    [GeneratedRegex(@"[^.]")]
-    private static partial Regex MatchSymbol();
+    [GeneratedRegex(@"\.")]
+    private static partial Regex MatchPoint();
 }
